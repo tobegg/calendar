@@ -1,121 +1,64 @@
-import React, { useState } from 'react';
+import { months, weekDays } from '@/constants';
+import React, { useRef, useState } from 'react';
+import Cell from './Cell';
 
 function Calendar() {
-  const [date, setDate] = useState(new Date());
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState('');
+  const dateNow = new Date();
 
-  const nextMonth = () => {
-    setDate(new Date(date.getFullYear(), date.getMonth() + 1, 1));
-  };
-
-  const prevMonth = () => {
-    setDate(new Date(date.getFullYear(), date.getMonth() - 1, 1));
-  };
-
-  const weekdaysShort = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-  const months = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
-
-  const monthDays = () => {
+  const daysList = () => {
+    const lastDayOfCurrentMonth = new Date(dateNow.getFullYear(), dateNow.getMonth() + 1, 0).getDate();
     const days = [];
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
 
-    for (let i = 1; i <= lastDay; i++) {
+    for (let i = 1; i <= lastDayOfCurrentMonth; i++) {
       days.push(i);
     }
 
     return days;
   };
 
-  const handleNewTaskChange = (event) => {
-    setNewTask(event.target.value);
+  const generateTableHeader = () => {
+    return weekDays.map((weekName) => {
+      return <th key={weekName}>{weekName}</th>;
+    });
+  }
+
+  const generateTableBody = () => {
+    const weekDayMonthBegins = new Date(dateNow.getFullYear(), dateNow.getMonth(), 1).getDay();
+    const emptyCells = Array.from({ length: weekDayMonthBegins }, (_, i) => (
+      <Cell key={`empty-${i}`} />
+    ));
+
+    const days = daysList().map((day) => (
+      <Cell key={day} date={day} />
+    ));
+
+    const totalCells = [...emptyCells, ...days];
+
+    const rows = Array.from({ length: Math.ceil(totalCells.length / 7) }, (_, i) => {
+      const startPosition = i * 7;
+      return totalCells.slice(startPosition, startPosition + 7)
+    });
+
+    return rows.map((row, i) => (
+      <tr key={i}>{row}</tr>
+    ));
   };
 
-  const handleNewTaskSubmit = (event) => {
-    event.preventDefault();
-    setTasks([...tasks, { date: date.getDate(), month: date.getMonth(), year: date.getFullYear(), text: newTask }]);
-    setNewTask('');
-  };
-
-  const renderCalendar = () => {
-    const weekdays = weekdaysShort.map((day) => {
-      return <th key={day}>{day}</th>;
-    });
-
-    const blanks = [];
-    for (let i = 0; i < new Date(date.getFullYear(), date.getMonth(), 1).getDay(); i++) {
-      blanks.push(<td key={i * 100}></td>);
-    }
-
-    const days = monthDays().map((day) => {
-      const task = tasks.find((t) => t.date === day && t.month === date.getMonth() && t.year === date.getFullYear());
-      return (
-        <td key={day} className={day === new Date().getDate() && date.getMonth() === new Date().getMonth() ? 'today' : null}>
-          {day}
-          {task && <div className="task">{task.text}</div>}
-        </td>
-      );
-    });
-
-    const totalSlots = [...blanks, ...days];
-    let rows = [];
-    let cells = [];
-
-    totalSlots.forEach((row, i) => {
-      if (i % 7 !== 0) {
-        cells.push(row);
-      } else {
-        rows.push(cells);
-        cells = [];
-        cells.push(row);
-      }
-      if (i === totalSlots.length - 1) {
-        rows.push(cells);
-      }
-    });
-
-    const dayHeaders = weekdaysShort.map(day => (
-      <th key={day}>{day}</th>
-  ));
-
-    const calRows = rows.map((day, i) => {
-      return <tr key={i * 100}>{day}</tr>;
-    });
-
-    return (
-      <div className="calendar">
-        <h2>{date.toLocaleDateString("en-US", { month: "long", year: "numeric" })}</h2>
-        <table>
-          <thead>
-            <tr>{dayHeaders}</tr>
-          </thead>
-          <tbody>{calRows}</tbody>
-        </table>
-        <form onSubmit={handleNewTaskSubmit}>
-          <label>
-            Add task:
-            <input type="text" value={newTask} onChange={handleNewTaskChange} />
-          </label>
-          <button type="submit">Add</button>
-        </form>
+  return (
+    <div className="calendar">
+      <div className="header text-3xl font-bold underline">
+        <h1>
+          {months[dateNow.getMonth()]} {dateNow.getFullYear()}
+        </h1>
       </div>
-    );
-  };
-
-  return <div>{renderCalendar()}</div>;
+      <table className="table w-[1200px] h-[600px]">
+        <thead>
+          <tr>{generateTableHeader()}</tr>
+        </thead>
+        <tbody>{generateTableBody()}</tbody>
+      </table>
+    </div>
+  );
 }
 
 export default Calendar;

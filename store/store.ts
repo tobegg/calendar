@@ -1,9 +1,9 @@
 import { userAPI } from "@/services/UserService";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import userReducer from './reducers/UserSlice';
+import taskReducer from './reducers/TasksSlice';
 
 const rootReducer = combineReducers({
-  userReducer,
+  taskReducer,
   [userAPI.reducerPath]: userAPI.reducer
 });
 
