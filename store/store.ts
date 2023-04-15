@@ -1,16 +1,16 @@
-import { userAPI } from "@/services/UserService";
+import { eventAPI } from "@/services/EventService";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import taskReducer from './reducers/TasksSlice';
 
 const rootReducer = combineReducers({
   taskReducer,
-  [userAPI.reducerPath]: userAPI.reducer
+  [eventAPI.reducerPath]: eventAPI.reducer
 });
 
 export const setupStore = () => {
   return configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(userAPI.middleware) 
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(eventAPI.middleware)
   });
 }
 

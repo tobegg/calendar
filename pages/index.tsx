@@ -1,20 +1,13 @@
-/* import { useAppDispatch, useAppSelector } from '@/hooks/redux'
-import { useEffect } from 'react';
-import { fetchUsers } from '@/store/actions/userActions'; */
 import Head from 'next/head'
 import styles from '@/styles/Home.module.scss'
-import UsersContainer from '@/components/TaskContainer';
-import Calendar from '@/components/Calendar';
+import dynamic from 'next/dynamic';
+
+const CalendarWithNoSSR = dynamic(
+  () => import('@/components/Calendar'),
+  { ssr: false }
+)
 
 export default function Home() {
-  /* const dispatch = useAppDispatch();
-  const { users, isLoading, error } = useAppSelector(state => state.userReducer);
-
-  useEffect(() => {
-    dispatch(fetchUsers());
-  }, []); */
-
-
   return (
     <>
       <Head>
@@ -24,7 +17,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={styles.main}>
-        <Calendar />
+        <CalendarWithNoSSR />
       </main>
     </>
   )

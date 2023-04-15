@@ -1,6 +1,6 @@
-export const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+export const WEEK_DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-export const months = [
+export const MONTHS = [
   'January',
   'February',
   'March',
@@ -13,4 +13,21 @@ export const months = [
   'October',
   'November',
   'December',
+];
+
+export const COLORS = [
+  'orange',
+  'amber',
+  'yellow',
+  'lime',
+  'green',
+  'emerald',
+  'teal',
+  'cyan',
+  'sky',
+  'blue',
+  'indigo',
+  'violet',
+  'purple',
+  'pink'
 ];
