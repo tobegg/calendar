@@ -40,7 +40,9 @@ const TaskContainer: FC<TaskContainerProps> = ({ date, month, year }) => {
   };
 
   const handleTaskUpdate = (title: string, labels: IOption[]) => {
-    dispatch(editTask({  ...selectedTask, title, labels }));
+    if (selectedTask) {
+      dispatch(editTask({ ...selectedTask, title, labels }));
+    }
     setSelectedTask(null);
   };
 

@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/redux';
 import { toPng } from 'html-to-image'
 import IOption from '@/models/IOption';
 import { tasksSlice } from '@/store/reducers/TasksSlice';
-import { ChangeEventHandler, useCallback, useEffect, useRef } from 'react';
+import { ChangeEventHandler, useCallback, useRef } from 'react';
 import { DragDropContext, OnDragEndResponder } from 'react-beautiful-dnd';
 import Cell from './Cell';
 import LabelMultiSelect from './LabelMultiSelect';
